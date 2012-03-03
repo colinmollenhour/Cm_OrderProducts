@@ -18,7 +18,8 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             'sales/order_item',
             '`sales/order_item`.order_id=`main_table`.entity_id',
             array(
-                'skus'  => new Zend_Db_Expr('group_concat(`sales/order_item`.sku SEPARATOR "<br/>")'),
+                'skus'  => new Zend_Db_Expr('group_concat(`sales/order_item`.sku SEPARATOR "^^")'),
+                'qtys'  => new Zend_Db_Expr('group_concat(`sales/order_item`.qty_ordered SEPARATOR "^^")'),
 //                'names' => new Zend_Db_Expr('group_concat(`sales/order_item`.name SEPARATOR "<br/>")'),
             )
         );
@@ -36,6 +37,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             'type'      => 'text',
             'filter_index' => '`sales/order_item`.sku',
             'sortable'  => FALSE,
+            'renderer'  => 'Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Skus',
         ), 'shipping_name');
 /*
         $this->addColumnAfter('names', array(
