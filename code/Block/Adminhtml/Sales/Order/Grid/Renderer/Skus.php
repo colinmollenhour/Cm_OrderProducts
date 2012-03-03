@@ -17,12 +17,13 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Skus extends Ma
     {
         $skus = explode('^^', $row->getSkus());
         $qtys = explode('^^', $row->getQtys());
+        $names = explode('^^', $row->getNames());
         $html = '';
         foreach ($skus as $i => $sku) {
             if($qtys[$i] == round($qtys[$i],0)) {
-              $html .= sprintf('<tr><td>%s</td><td style="width:1em;">%d</td></tr>', $sku, $qtys[$i]);
+              $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', $names[$i], $sku, $qtys[$i]);
             } else {
-              $html .= sprintf('<tr><td>%s{$sku}</td><td style="width:1em;">%.4f</td></tr>', $sku, $qtys[$i]);
+              $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $names[$i], $sku, $qtys[$i]);
             }
         }
         return '<table><tbody>'.$html.'</tbody></table>';
