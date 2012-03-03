@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cm_OrderProducts>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Cm_OrderProducts>        
+    </modules>
+</config>

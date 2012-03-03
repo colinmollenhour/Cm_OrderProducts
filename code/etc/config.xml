@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <modules>
+    <Cm_OrderProducts>
+      <version>0.1.0</version>
+    </Cm_OrderProducts>
+  </modules>
+
+  <global>
+    <blocks>
+      <adminhtml>
+        <rewrite>
+          <sales_order_grid>Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid</sales_order_grid>
+        </rewrite>
+      </adminhtml>
+    </blocks>
+  </global>
+
+</config>
