@@ -7,11 +7,14 @@
 class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_Block_Sales_Order_Grid
 {
 
+    const XML_PATH_RENDER_COLUMN = 'sales/cmorderproducts/render';
+    const XML_PATH_FILTER_COLUMN = 'sales/cmorderproducts/filter';
+
     // MUST override setCollection rather than _prepareCollection to get filtering and paging both working
     public function setCollection($collection)
     {
         parent::setCollection($collection);
-        if ($this->_isExport) return;
+        if ( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
 
         $collection->getSize(); // Get size before adding join
         $collection->join(
@@ -29,15 +32,16 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
     protected function _prepareColumns()
     {
         parent::_prepareColumns();
-        if($this->_isExport) return;
+        if( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
 
         $this->addColumnAfter('skus', array(
-            'header'    => Mage::helper('sales')->__('Product Skus'),
+            'header'    => Mage::helper('sales')->__('Products Ordered (%s)', Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN)),
             'index'     => 'skus',
             'type'      => 'text',
-            'filter_index' => '`sales/order_item`.sku',
+            'filter_index' => '`sales/order_item`.'. Mage::getStoreConfig(self::XML_PATH_FILTER_COLUMN),
             'sortable'  => FALSE,
-            'renderer'  => 'Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Skus',
+            'renderer'  => 'Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products',
+            'render_column' =>  Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN),
         ), 'shipping_name');
 
         $this->sortColumnsByOrder();

@@ -16,4 +16,12 @@
     </blocks>
   </global>
 
+  <default>
+    <sales>
+      <cmorderproducts>
+        <render>skus</render>
+        <filter>sku</filter>
+      </cmorderproducts>
+    </sales>
+  </default>
 </config>
