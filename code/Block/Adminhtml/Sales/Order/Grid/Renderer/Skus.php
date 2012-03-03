@@ -26,7 +26,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Skus extends Ma
               $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $names[$i], $sku, $qtys[$i]);
             }
         }
-        return '<table><tbody>'.$html.'</tbody></table>';
+        return '<table style="border: 0; border-collapse: collapse;"><tbody>'.$html.'</tbody></table>';
     }
 
 }
