@@ -10,7 +10,12 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
     const XML_PATH_RENDER_COLUMN = 'sales/cmorderproducts/render';
     const XML_PATH_FILTER_COLUMN = 'sales/cmorderproducts/filter';
 
-    // MUST override setCollection rather than _prepareCollection to get filtering and paging both working
+    /**
+     * MUST override setCollection rather than _prepareCollection to get filtering and paging both working
+     *
+     * @param Mage_Sales_Model_Mysql4_Order_Grid_Collection $collection
+     * @return
+     */
     public function setCollection($collection)
     {
         parent::setCollection($collection);
@@ -33,6 +38,13 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
     {
         parent::_prepareColumns();
         if( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
+
+        // Specify table to fix ambiguous column errors
+        foreach($this->getColumns() as $column) {
+            if($column->getIndex()) {
+                $column->setFilterIndex('`main_table`.'.$column->getIndex());
+            }
+        }
 
         $this->addColumnAfter('skus', array(
             'header'    => Mage::helper('sales')->__('Products Ordered (%s)', Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN)),
