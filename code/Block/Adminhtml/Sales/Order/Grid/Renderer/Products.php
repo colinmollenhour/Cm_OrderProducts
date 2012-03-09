@@ -15,26 +15,26 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products extend
      */
     public function render(Varien_Object $row)
     {
-        $skus = explode('^^', $row->getSkus());
-        $qtys = explode('^^', $row->getQtys());
-        $names = explode('^^', $row->getNames());
+        $skus = explode('^', $row->getSkus());
+        $qtys = explode('^', $row->getQtys());
+        $names = explode('^', $row->getNames());
         $html = '';
         switch($this->getColumn()->getRenderColumn()) {
             case 'skus':
                 foreach ($skus as $i => $sku) {
                     if($qtys[$i] == round($qtys[$i],0)) {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', $names[$i], $sku, $qtys[$i]);
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', trim($names[$i]), $sku, trim($qtys[$i]));
                     } else {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $names[$i], $sku, $qtys[$i]);
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', trim($names[$i]), $sku, trim($qtys[$i]));
                     }
                 }
                 break;
             case 'names':
                 foreach ($skus as $i => $sku) {
                     if($qtys[$i] == round($qtys[$i],0)) {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', $sku, $names[$i], $qtys[$i]);
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', $sku, trim($names[$i]), trim($qtys[$i]));
                     } else {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $sku, $names[$i], $qtys[$i]);
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $sku, trim($names[$i]), trim($qtys[$i]));
                     }
                 }
                 break;
