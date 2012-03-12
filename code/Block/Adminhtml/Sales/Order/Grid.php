@@ -21,6 +21,9 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         parent::setCollection($collection);
         if ( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
 
+        // Increase max length of group concat fields for long product names
+        Mage::getSingleton('core/resource')->getConnection('read')->exec('SET SESSION group_concat_max_len = 4096;');
+
         $collection->getSize(); // Get size before adding join
         $collection->join(
             'sales/order_item',
