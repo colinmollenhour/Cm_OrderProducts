@@ -21,20 +21,64 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         parent::setCollection($collection);
         if ( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
 
-        // Increase max length of group concat fields for long product names
-        Mage::getSingleton('core/resource')->getConnection('read')->exec('SET SESSION group_concat_max_len = 4096;');
+        // Only join if we have to
+        $filters = $this->getParam($this->getVarNameFilter(), null);
+        if (is_string($filters)) {
+            $filters = $this->helper('adminhtml')->prepareFilterString($filters);
+        }
+        if ( $filters && (is_array($filters) && ! empty($filters['skus'])))
+        {
+            $collection->getSize(); // Get size before adding join
+            $collection->join(
+              'sales/order_item',
+              '`sales/order_item`.order_id=`main_table`.entity_id',
+              array()
+            );
+            $collection->getSelect()->group('entity_id');
+        }
+    }
 
-        $collection->getSize(); // Get size before adding join
-        $collection->join(
-            'sales/order_item',
-            '`sales/order_item`.order_id=`main_table`.entity_id',
-            array(
+    /**
+     * Adding item data using second query because:
+     *
+     * - Join causes use of temporary table == slow
+     * - Wrapping the main query as a subquery is too complex
+     * - We want to show all order items for orders that matched filter by sku/name
+     *
+     * @return mixed
+     */
+    protected function _prepareCollection()
+    {
+        parent::_prepareCollection();
+        if ( ! Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN) || $this->_isExport) return;
+
+        $orderIds = array();
+        $orderCollection = $this->getCollection(); /** @var $orderCollection Mage_Sales_Model_Mysql4_Order_Grid_Collection */
+        foreach ($orderCollection as $order) {
+            $orderIds[] = $order->getEntityId();
+        }
+        $conn = Mage::getSingleton('core/resource')->getConnection('read'); /* @var $conn Zend_Db_Adapter_Pdo_Abstract */
+
+        // Increase max length of group concat fields for long product names
+        $conn->exec('SET SESSION group_concat_max_len = 4096;');
+
+        $itemsCollection = new Varien_Data_Collection_Db($conn);
+        $itemsCollection->getSelect()
+            ->from(array('sales/order_item' => $orderCollection->getTable('sales/order_item')), array(
+                'order_id',
                 'skus'  => new Zend_Db_Expr('group_concat(`sales/order_item`.sku SEPARATOR " ^ ")'),
                 'qtys'  => new Zend_Db_Expr('group_concat(`sales/order_item`.qty_ordered SEPARATOR " ^ ")'),
                 'names' => new Zend_Db_Expr('group_concat(`sales/order_item`.name SEPARATOR " ^ ")'),
-            )
-        );
-        $collection->getSelect()->group('entity_id');
+            ))
+            ->where('order_id IN (?)', $orderIds)
+            ->group('order_id');
+        foreach ($itemsCollection as $object)
+        {
+            $order = $orderCollection->getItemById($object->getOrderId());
+            $order->setSkus($object->getSkus());
+            $order->setQtys($object->getQtys());
+            $order->setNames($object->getNames());
+        }
     }
 
     protected function _prepareColumns()
