@@ -79,6 +79,8 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             $order->setQtys($object->getQtys());
             $order->setNames($object->getNames());
         }
+
+        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareCollection', ['block' => $this]);
     }
 
     protected function _prepareColumns()
@@ -104,6 +106,8 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         ), 'shipping_name');
 
         $this->sortColumnsByOrder();
+
+        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareColumns', ['block' => $this]);
     }
 
 }
