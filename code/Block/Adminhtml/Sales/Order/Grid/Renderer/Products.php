@@ -15,6 +15,9 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products extend
      */
     public function render(Varien_Object $row)
     {
+        if ( ! $row->getSkus()) {
+            return '';
+        }
         $skus = explode('^', $row->getSkus());
         $qtys = explode('^', $row->getQtys());
         $names = explode('^', $row->getNames());
