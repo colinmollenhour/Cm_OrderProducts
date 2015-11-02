@@ -29,8 +29,8 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         {
             $collection->getSize(); // Get size before adding join
             $collection->join(
-              'sales/order_item',
-              '`sales/order_item`.order_id=`main_table`.entity_id',
+              ['soi' => 'sales/order_item'],
+              'soi.order_id=main_table.entity_id',
               array()
             );
             $collection->getSelect()->group('entity_id');
@@ -64,11 +64,11 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
 
             $itemsCollection = new Varien_Data_Collection_Db($conn);
             $itemsCollection->getSelect()
-                            ->from(array('sales/order_item' => $orderCollection->getTable('sales/order_item')), array(
+                            ->from(array('soi' => $orderCollection->getTable('sales/order_item')), array(
                                 'order_id',
-                                'skus'  => new Zend_Db_Expr('group_concat(`sales/order_item`.sku SEPARATOR " ^ ")'),
-                                'qtys'  => new Zend_Db_Expr('group_concat(`sales/order_item`.qty_ordered SEPARATOR " ^ ")'),
-                                'names' => new Zend_Db_Expr('group_concat(`sales/order_item`.name SEPARATOR " ^ ")'),
+                                'skus'  => new Zend_Db_Expr('group_concat(`soi`.sku SEPARATOR " ^ ")'),
+                                'qtys'  => new Zend_Db_Expr('group_concat(`soi`.qty_ordered SEPARATOR " ^ ")'),
+                                'names' => new Zend_Db_Expr('group_concat(`soi`.name SEPARATOR " ^ ")'),
                             ))
                             ->where('order_id IN (?)', $orderIds)
                             ->group('order_id');
@@ -107,7 +107,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
                 'header'    => Mage::helper('sales')->__('Products Ordered (%s)', Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN)),
                 'index'     => 'skus',
                 'type'      => 'text',
-                'filter_index' => '`sales/order_item`.'. Mage::getStoreConfig(self::XML_PATH_FILTER_COLUMN),
+                'filter_index' => 'soi.'. Mage::getStoreConfig(self::XML_PATH_FILTER_COLUMN),
                 'sortable'  => FALSE,
                 'renderer'  => 'Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products',
                 'render_column' =>  Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN),
