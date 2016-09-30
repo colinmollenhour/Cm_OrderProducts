@@ -1,7 +1,7 @@
 # Description
 
 This module adds a "Products Ordered" column to the Magento orders grid. It can be configured to
-display either SKUs or Names and will display the quantities ordrered in both cases. The column
+display either SKUs or Names and will display the quantities ordered in both cases. The column
 can be used to filter orders to only those that contain matching SKUs or names depending on configuration.
 
 # Installation
