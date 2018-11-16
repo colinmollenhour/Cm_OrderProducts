@@ -98,7 +98,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         {
             // Specify table to fix ambiguous column errors
             foreach($this->getColumns() as $column) {
-                if($column->getIndex()) {
+                if($column->getIndex() && !$column->getFilterIndex()) {
                     $column->setFilterIndex('main_table.'.$column->getIndex());
                 }
             }
