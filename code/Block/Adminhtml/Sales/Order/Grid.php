@@ -108,7 +108,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
                 'index'     => 'skus',
                 'type'      => 'text',
                 'filter_index' => 'soi.'. Mage::getStoreConfig(self::XML_PATH_FILTER_COLUMN),
-                'sortable'  => FALSE,
+                'sortable'  => false,
                 'renderer'  => 'Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products',
                 'render_column' =>  Mage::getStoreConfig(self::XML_PATH_RENDER_COLUMN),
             ), 'shipping_name');
