@@ -35,6 +35,8 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             );
             $collection->getSelect()->group('entity_id');
         }
+        
+        Mage::dispatchEvent('cm_orderproducts_sales_order_grid_setCollection', ['block' => $this]);
     }
 
     /**
