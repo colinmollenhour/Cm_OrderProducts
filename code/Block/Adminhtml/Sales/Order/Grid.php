@@ -36,7 +36,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             $collection->getSelect()->group('entity_id');
         }
         
-        Mage::dispatchEvent('cm_orderproducts_sales_order_grid_setCollection', ['block' => $this]);
+        Mage::dispatchEvent('cm_orderproducts_sales_order_grid_setCollection', ['block' => $this, 'is_export' => $this->_isExport]);
     }
 
     /**
@@ -84,7 +84,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
 
         }
 
-        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareCollection', ['block' => $this]);
+        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareCollection', ['block' => $this, 'is_export' => $this->_isExport]);
 
         return $this;
     }
@@ -118,7 +118,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             $this->sortColumnsByOrder();
         }
 
-        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareColumns', ['block' => $this]);
+        Mage::app()->dispatchEvent('cm_orderproducts_sales_order_grid_prepareColumns', ['block' => $this, 'is_export' => $this->_isExport]);
 
         return $this;
     }
