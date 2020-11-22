@@ -18,6 +18,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products extend
         if ( ! $row->getSkus()) {
             return '';
         }
+        $ids = explode('^', $row->getIds());
         $skus = explode('^', $row->getSkus());
         $qtys = explode('^', $row->getQtys());
         $names = explode('^', $row->getNames());
@@ -29,18 +30,18 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid_Renderer_Products extend
             case 'skus':
                 foreach ($skus as $i => $sku) {
                     if($qtys[$i] == round($qtys[$i],0)) {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', trim($names[$i]), $sku, trim($qtys[$i]));
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', Mage::getUrl('adminhtml/catalog_product/edit', ['id' => trim($ids[$i])]), $sku, trim($qtys[$i]));
                     } else {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', trim($names[$i]), $sku, trim($qtys[$i]));
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', Mage::getUrl('adminhtml/catalog_product/edit', ['id' => trim($ids[$i])]), $sku, trim($qtys[$i]));
                     }
                 }
                 break;
             case 'names':
                 foreach ($skus as $i => $sku) {
                     if($qtys[$i] == round($qtys[$i],0)) {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', $sku, trim($names[$i]), trim($qtys[$i]));
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%d</td></tr>', Mage::getUrl('adminhtml/catalog_product/edit', ['id' => trim($ids[$i])]), trim($names[$i]), trim($qtys[$i]));
                     } else {
-                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', $sku, trim($names[$i]), trim($qtys[$i]));
+                      $html .= sprintf('<tr title="%s" style="cursor:default;"><td>%s</td><td style="width:1em;">%.4f</td></tr>', Mage::getUrl('adminhtml/catalog_product/edit', ['id' => trim($ids[$i])]), trim($names[$i]), trim($qtys[$i]));
                     }
                 }
                 break;

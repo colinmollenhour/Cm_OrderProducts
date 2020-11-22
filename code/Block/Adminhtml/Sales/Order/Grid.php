@@ -68,6 +68,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             $itemsCollection->getSelect()
                             ->from(array('soi' => $orderCollection->getTable('sales/order_item')), array(
                                 'order_id',
+                                'ids'  => new Zend_Db_Expr('group_concat(`soi`.product_id SEPARATOR " ^ ")'),
                                 'skus'  => new Zend_Db_Expr('group_concat(`soi`.sku SEPARATOR " ^ ")'),
                                 'qtys'  => new Zend_Db_Expr('group_concat(`soi`.qty_ordered SEPARATOR " ^ ")'),
                                 'names' => new Zend_Db_Expr('group_concat(`soi`.name SEPARATOR " ^ ")'),
@@ -77,6 +78,7 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
             foreach ($itemsCollection as $object)
             {
                 $order = $orderCollection->getItemById($object->getOrderId());
+                $order->setIds($object->getIds());
                 $order->setSkus($object->getSkus());
                 $order->setQtys($object->getQtys());
                 $order->setNames($object->getNames());
