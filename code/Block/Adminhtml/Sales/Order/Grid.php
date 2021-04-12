@@ -27,7 +27,6 @@ class Cm_OrderProducts_Block_Adminhtml_Sales_Order_Grid extends Mage_Adminhtml_B
         }
         if ( $filters && (is_array($filters) && ! empty($filters['skus'])))
         {
-            $collection->getSize(); // Get size before adding join
             $collection->join(
               ['soi' => 'sales/order_item'],
               'soi.order_id=main_table.entity_id',
